@@ -100,4 +100,14 @@ export class GptController {
   async imageGeneration(@Body() imageGenerationDto: ImageGenerationDto) {
     return await this.gptService.imageGeneration(imageGenerationDto);
   }
+
+  @Get('image-generation/:fileName')
+  async getGeneratedImage(
+    @Res() res: Response,
+    @Param('fileName') fileName: string,
+  ) {
+    const filePath = await this.gptService.getGeneratedImage(fileName);
+    res.status(HttpStatus.OK)
+    res.sendFile(filePath);
+  }
 }
