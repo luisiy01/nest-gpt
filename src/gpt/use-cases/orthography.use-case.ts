@@ -39,7 +39,12 @@ export const orthographyCheckUseCase = async (openAI: OpenAI, options: Options) 
         ],
         temperature: 0.3,
         max_tokens: 150,
+        response_format: {
+            type: "json_object",
+        },
     });
 
-    return completion.choices[0];
+    const jsonResp = JSON.parse(completion.choices[0].message.content || '');
+
+    return jsonResp;
 }
