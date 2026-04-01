@@ -26,11 +26,11 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
         throw new Error('No image was generated');
     }
 
-    await downloadImageAsPng(url);
+    const fileName = await downloadImageAsPng(url);
 
     return {
         url: url,
-        localPath: '',
+        openAIUrl: resp.data?.[0]?.url,
         revised_prompt: resp.data?.[0]?.revised_prompt,
-    }
+    };
 }

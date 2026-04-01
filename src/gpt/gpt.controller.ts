@@ -96,15 +96,8 @@ export class GptController {
     return this.gptService.audioToText(file, audioToTextDto);
   }
 
-
   @Post('image-generation')
-  async imageGeneration(
-    @Body() imageGenerationDto: ImageGenerationDto,
-    @Res() res: Response,
-  ) {
-    const imagePath = await this.gptService.imageGeneration(imageGenerationDto);
-    /*  res.setHeader('Content-Type', 'image/png');
-     res.status(HttpStatus.OK)
-     res.sendFile(imagePath); */
+  async imageGeneration(@Body() imageGenerationDto: ImageGenerationDto) {
+    return await this.gptService.imageGeneration(imageGenerationDto);
   }
 }
