@@ -87,12 +87,11 @@ export class GptController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 5, message: 'El archivo debe pesar menos de 5MB' }),
-          new FileTypeValidator({ fileType: 'audio/*' }),
+          //new FileTypeValidator({ fileType: 'audio/mp4' }),
         ],
       }),
     ) file: Express.Multer.File,
   ) {
-    console.log(file)
-    return 'done'
+    return this.gptService.audioToText(file);
   }
 }
