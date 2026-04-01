@@ -30,9 +30,10 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
         }
 
         const fileName = await downloadImageAsPng(url);
+        const correctUrl = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
         return {
-            url: fileName,
+            url: correctUrl,
             openAIUrl: resp.data?.[0]?.url,
             revised_prompt: resp.data?.[0]?.revised_prompt,
         };
@@ -59,11 +60,10 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
 
     const localImagePath = await downloadImageAsPng(url);
     const fileName = path.basename(localImagePath);
-
-    const publicUrl = `localhost:3000/${fileName}`;
+    const correctUrl = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
     return {
-        url: publicUrl,
+        url: correctUrl,
         openAIUrl: resp.data?.[0]?.url,
         revised_prompt: resp.data?.[0]?.revised_prompt,
     };
