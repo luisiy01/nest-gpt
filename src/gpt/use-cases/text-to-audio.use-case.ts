@@ -1,4 +1,6 @@
 import OpenAI from "openai";
+import * as path from 'path';
+import * as fs from 'fs';
 
 interface Options {
     prompt: string;
@@ -14,6 +16,13 @@ export const textToAudioUseCase = async (openAI: OpenAI, { prompt, voice }: Opti
         onyx: 'onyx',
         nova: 'nova',
         shimmer: 'shimmer',
+        ash: 'ash',
+        ballad: 'ballad',
+        coral: 'coral',
+        sage: 'sage',
+        verse: 'verse',
+        marin: 'marin',
+        cedar: 'cedar'
     }
 
     let selectedVoice = 'nova'
@@ -21,10 +30,21 @@ export const textToAudioUseCase = async (openAI: OpenAI, { prompt, voice }: Opti
         selectedVoice = voices[voice] ?? 'nova';
     }
 
+    const folderPath = path.resolve(__dirname, '../../../generated/audios/');
+    const speechFile = path.resolve(`${folderPath}/${new Date().getTime()}.mp3`);
+
+    fs.mkdirSync(folderPath, { recursive: true });
+
+    const mp3 = await openAI.audio.speech.create({
+        model: 'tts-1',
+        voice: selectedVoice,
+        input: prompt,
+        response_format: 'mp3',
+    });
 
 
-    return {
-        prompt,
-        selectedVoice
-    };
+    const buffer = Buffer.from(await mp3.arrayBuffer());
+    fs.writeFileSync(speechFile, buffer);
+
+    return speechFile;
 }
