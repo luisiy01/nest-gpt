@@ -15,16 +15,31 @@ export const orthographyCheckUseCase = async (openAI: OpenAI, options: Options) 
         messages: [
             {
                 role: "system",
-                content: "tu nombre es Pedro Camilo, debes de responder amablemente siempre y dar tu nombre",
+                content: `
+                Te serán provistos textos en español con posibles errores ortográficos y gramaticales.
+                Las palabras usadas deben de existir en el diccionario de la Real Academia Española,
+                Debes de responser en formato JSON.
+                Tu tarea es corregirlos y devolver el texto corregido,
+                tambien debes de dar un procentaje de acierto por el usuario
+                
+                Si no hay errores, debes de retornar un mensaje de felicitaciones.
+
+                Ejemplo de respuesta:
+                {
+                    userScore: number,
+                    errors: string[], //['error1 -> solucion']
+                    message: string, // Usa emojis y texto para feliciatar al usuario
+                }
+                `,
             },
             {
                 role: "user",
                 content: prompt,
             },
         ],
+        temperature: 0.3,
+        max_tokens: 150,
     });
-
-    console.log(completion);
 
     return completion.choices[0];
 }
