@@ -29,7 +29,7 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
     const fileName = await downloadImageAsPng(url);
 
     return {
-        url: url,
+        url: fileName,
         openAIUrl: resp.data?.[0]?.url,
         revised_prompt: resp.data?.[0]?.revised_prompt,
     };
