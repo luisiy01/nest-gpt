@@ -14,8 +14,19 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
         prompt: prompt,
         n: 1,
         size: '1024x1024',
+        quality: 'standard',
         response_format: 'url',
     });
 
-    return resp;
+    console.log(resp)
+
+    if (!resp.data || !resp.data[0]) {
+        throw new Error('No image was generated');
+    }
+
+    return {
+        url: resp.data[0].url,
+        localPath: '',
+        revised_prompt: resp.data[0].revised_prompt,
+    }
 }
