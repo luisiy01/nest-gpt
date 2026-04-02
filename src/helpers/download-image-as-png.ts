@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import sharp from "sharp";
 
-export const downloadImageAsPng = async (url: string) => {
+export const downloadImageAsPng = async (url: string, fullPath: boolean = false) => {
     const response = await fetch(url);
 
 
@@ -30,11 +30,11 @@ export const downloadImageAsPng = async (url: string) => {
         .toFile(completePath);
 
 
-    return imageNamePng;
+    return fullPath ? completePath : imageNamePng;
 }
 
 
-export const downloadBase64ImageAsPng = async (base64Image: string) => {
+export const downloadBase64ImageAsPng = async (base64Image: string, fullPath: boolean = false) => {
 
     // Remover encabezado
     base64Image = base64Image.split(';base64,').pop() || '';
@@ -53,6 +53,6 @@ export const downloadBase64ImageAsPng = async (base64Image: string) => {
         .ensureAlpha()
         .toFile(completePath);
 
-    return imageNamePng;
+    return fullPath ? completePath : imageNamePng;
 
 }

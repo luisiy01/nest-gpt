@@ -9,25 +9,27 @@ interface Options {
 export const imageVariationUseCase = async (openai: OpenAI, options: Options) => {
     const { baseImage } = options;
 
+    const pngImagePath = await downloadImageAsPng(baseImage, true);
+
     const resp = await openai.images.createVariation({
         model: 'dall-e-3',
-        image: fs.createReadStream(baseImage),
+        image: fs.createReadStream(pngImagePath),
         n: 1,
         size: '1024x1024',
         response_format: 'url',
     });
 
-    const url = resp.data?.[0]?.url;
-    if (!url) {
-        throw new Error('No image was generated');
+    const imageUrl = resp.data?.[0]?.url;
+
+    if (!imageUrl) {
+        throw new Error('No image URL returned from OpenAI');
     }
 
-    const fileName = await downloadImageAsPng(url);
-    const correctUrl = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
-
+    const fileName = await downloadImageAsPng(imageUrl);
+    const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
     return {
-        url: correctUrl,
-        openAIUrl: resp.data?.[0]?.url,
+        url,
+        openAIUrl: imageUrl,
         revised_prompt: resp.data?.[0]?.revised_prompt,
     };
 }
