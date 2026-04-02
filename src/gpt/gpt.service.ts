@@ -76,7 +76,7 @@ export class GptService {
     }
 
     async generateImageVariation({ baseImage }: ImageVariationDto) {
-        return await imageVariationUseCase(this.openAI, {
+        return imageVariationUseCase(this.openAI, {
             baseImage,
         });
     }

@@ -12,7 +12,7 @@ export const imageVariationUseCase = async (openai: OpenAI, options: Options) =>
     const pngImagePath = await downloadImageAsPng(baseImage, true);
 
     const resp = await openai.images.createVariation({
-        model: 'dall-e-3',
+        model: 'dall-e-2',
         image: fs.createReadStream(pngImagePath),
         n: 1,
         size: '1024x1024',
